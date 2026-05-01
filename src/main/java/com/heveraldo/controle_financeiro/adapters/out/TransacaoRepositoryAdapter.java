@@ -36,9 +36,27 @@ public class TransacaoRepositoryAdapter implements TransacaoRepositoryPort {
                 .stream().map(this::toDomain).collect(Collectors.toList());
     }
 
-    private Transacao toDomain(TransacaoEntity entity) {
-        Transacao domain = new Transacao();
-        BeanUtils.copyProperties(entity, domain);
-        return domain;
-    }
+    private TransacaoEntity toEntity(Transacao domain) {
+    return new TransacaoEntity(
+        domain.getId(),
+        domain.getDescricao(),
+        domain.getValor(),
+        domain.getData(),
+        domain.getTipo(),
+        domain.getCategoria(),
+        domain.getObservacao()
+    );
+}
+
+private Transacao toDomain(TransacaoEntity entity) {
+    return Transacao.builder()
+        .id(entity.getId())
+        .descricao(entity.getDescricao())
+        .valor(entity.getValor())
+        .data(entity.getData())
+        .tipo(entity.getTipo())
+        .categoria(entity.getCategoria())
+        .observacao(entity.getObservacao())
+        .build();
+}
 }
