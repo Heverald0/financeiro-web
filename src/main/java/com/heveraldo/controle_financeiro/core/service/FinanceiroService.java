@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.math.RoundingCenter;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -31,7 +31,6 @@ public class FinanceiroService {
                 .map(t -> t.getData().getMonth())
                 .distinct()
                 .count();
-
         return somaSalarios.divide(BigDecimal.valueOf(mesesTrabalhados), 2, RoundingMode.HALF_UP);
     }
 }
