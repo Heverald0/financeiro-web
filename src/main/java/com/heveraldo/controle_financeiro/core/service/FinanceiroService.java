@@ -2,6 +2,7 @@ package com.heveraldo.controle_financeiro.core.service;
 
 import com.heveraldo.controle_financeiro.core.model.Categoria;
 import com.heveraldo.controle_financeiro.core.model.Transacao;
+import com.heveraldo.controle_financeiro.core.ports.FinanceiroServicePort;
 import com.heveraldo.controle_financeiro.core.ports.TransacaoRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class FinanceiroService {
+public class FinanceiroService implements FinanceiroServicePort{
 
     private final TransacaoRepositoryPort repository;
 
