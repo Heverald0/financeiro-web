@@ -4,7 +4,6 @@ import com.heveraldo.controle_financeiro.core.model.Categoria;
 import com.heveraldo.controle_financeiro.core.model.Transacao;
 import com.heveraldo.controle_financeiro.core.ports.TransacaoRepositoryPort;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,45 +17,47 @@ public class TransacaoRepositoryAdapter implements TransacaoRepositoryPort {
 
     @Override
     public Transacao salvar(Transacao transacao) {
-        TransacaoEntity entity = new TransacaoEntity();
-        BeanUtils.copyProperties(transacao, entity);
+        TransacaoEntity entity = toEntity(transacao);
         TransacaoEntity saved = repository.save(entity);
-        BeanUtils.copyProperties(saved, transacao);
-        return transacao;
+        return toDomain(saved);
     }
 
     @Override
     public List<Transacao> buscarTodas() {
-        return repository.findAll().stream().map(this::toDomain).collect(Collectors.toList());
+        return repository.findAll().stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<Transacao> buscarReceitasPorCategoriaEAno(Categoria categoria, int ano) {
         return repository.findByCategoriaAndYear(categoria, ano)
-                .stream().map(this::toDomain).collect(Collectors.toList());
+                .stream()
+                .map(this::toDomain)
+                .collect(Collectors.toList());
     }
 
     private TransacaoEntity toEntity(Transacao domain) {
-    return new TransacaoEntity(
-        domain.getId(),
-        domain.getDescricao(),
-        domain.getValor(),
-        domain.getData(),
-        domain.getTipo(),
-        domain.getCategoria(),
-        domain.getObservacao()
-    );
-}
+        return new TransacaoEntity(
+            domain.getId(),
+            domain.getDescricao(),
+            domain.getValor(),
+            domain.getData(),
+            domain.getTipo(),
+            domain.getCategoria(),
+            domain.getObservacao()
+        );
+    }
 
-private Transacao toDomain(TransacaoEntity entity) {
-    return Transacao.builder()
-        .id(entity.getId())
-        .descricao(entity.getDescricao())
-        .valor(entity.getValor())
-        .data(entity.getData())
-        .tipo(entity.getTipo())
-        .categoria(entity.getCategoria())
-        .observacao(entity.getObservacao())
-        .build();
-}
+    private Transacao toDomain(TransacaoEntity entity) {
+        return Transacao.builder()
+            .id(entity.getId())
+            .descricao(entity.getDescricao())
+            .valor(entity.getValor())
+            .data(entity.getData())
+            .tipo(entity.getTipo())
+            .categoria(entity.getCategoria())
+            .observacao(entity.getObservacao())
+            .build();
+    }
 }
