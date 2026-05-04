@@ -8,4 +8,5 @@ public interface TransacaoRepositoryPort {
     Transacao salvar(Transacao transacao);
     List<Transacao> buscarTodas();
     List<Transacao> buscarReceitasPorCategoriaEAno(Categoria categoria, int ano);
+    void deletar(Long id);
 }

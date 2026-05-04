@@ -13,51 +13,57 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TransacaoRepositoryAdapter implements TransacaoRepositoryPort {
 
-    private final SpringDataTransacaoRepository repository;
+    // Nome alterado para bater com seu print (image_a795ca.png)
+    private final SpringDataTransacaoRepository jpaRepository;
 
     @Override
     public Transacao salvar(Transacao transacao) {
         TransacaoEntity entity = toEntity(transacao);
-        TransacaoEntity saved = repository.save(entity);
-        return toDomain(saved);
+        TransacaoEntity savedEntity = jpaRepository.save(entity);
+        return toDomain(savedEntity);
     }
 
     @Override
     public List<Transacao> buscarTodas() {
-        return repository.findAll().stream()
+        return jpaRepository.findAll().stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Transacao> buscarReceitasPorCategoriaEAno(Categoria categoria, int ano) {
-        return repository.findByCategoriaAndYear(categoria, ano)
-                .stream()
+        return jpaRepository.buscarReceitasPorCategoriaEAno(categoria, ano).stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
 
-    private TransacaoEntity toEntity(Transacao domain) {
-        return new TransacaoEntity(
-            domain.getId(),
-            domain.getDescricao(),
-            domain.getValor(),
-            domain.getData(),
-            domain.getTipo(),
-            domain.getCategoria(),
-            domain.getObservacao()
-        );
+    @Override
+    public void deletar(Long id) {
+        // Aciona o Soft Delete configurado na Entity
+        jpaRepository.deleteById(id);
+    }
+
+    private TransacaoEntity toEntity(Transacao transacao) {
+        return TransacaoEntity.builder()
+                .id(transacao.getId())
+                .descricao(transacao.getDescricao())
+                .valor(transacao.getValor())
+                .data(transacao.getData())
+                .tipo(transacao.getTipo())
+                .categoria(transacao.getCategoria())
+                .observacao(transacao.getObservacao()) 
+                .build();
     }
 
     private Transacao toDomain(TransacaoEntity entity) {
         return Transacao.builder()
-            .id(entity.getId())
-            .descricao(entity.getDescricao())
-            .valor(entity.getValor())
-            .data(entity.getData())
-            .tipo(entity.getTipo())
-            .categoria(entity.getCategoria())
-            .observacao(entity.getObservacao())
-            .build();
+                .id(entity.getId())
+                .descricao(entity.getDescricao())
+                .valor(entity.getValor())
+                .data(entity.getData())
+                .tipo(entity.getTipo())
+                .categoria(entity.getCategoria())
+                .observacao(entity.getObservacao())
+                .build();
     }
 }
