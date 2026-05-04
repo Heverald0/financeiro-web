@@ -1,34 +1,27 @@
 import { useEffect, useState } from "react";
-import { Wallet, TrendingUp, TrendingDown, PieChart as PieChartIcon } from "lucide-react";
+import { Wallet, TrendingUp, TrendingDown } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { 
   PieChart, 
   Pie, 
   Cell, 
   ResponsiveContainer, 
-  Tooltip, 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid 
+  Tooltip 
 } from "recharts";
-import { getResumo, ResumoFinanceiro } from "@/services/financeiroService";
+import { financeiroService, ResumoFinanceiro } from "@/services/financeiroService";
 
-// Cores seguindo o tema dark premium que você escolheu
 const COLORS = ["#8B5CF6", "#F97316", "#D946EF", "#0EA5E9"];
 
 export default function Dashboard() {
   const [dados, setDados] = useState<ResumoFinanceiro | null>(null);
 
   useEffect(() => {
-    // Busca os dados reais do seu Railway/MySQL
-    getResumo()
+    // Chamada corrigida: agora usamos financeiroService.getResumo()
+    financeiroService.getResumo()
       .then(setDados)
       .catch((error) => console.error("Erro ao buscar dados do Java:", error));
   }, []);
 
-  // Formatação de moeda para manter o padrão brasileiro
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",
@@ -36,7 +29,6 @@ export default function Dashboard() {
     }).format(value);
   };
 
-  // Dados mockados para o gráfico enquanto o backend de categorias não é plugado
   const dataPizza = [
     { name: "Moradia", value: 2200 },
     { name: "Alimentação", value: 680 },
@@ -51,7 +43,6 @@ export default function Dashboard() {
         <p className="text-slate-400 text-sm">Visão geral do seu mês</p>
       </header>
 
-      {/* Cards de Resumo */}
       <div className="grid gap-6 md:grid-cols-3 mb-8">
         <Card className="bg-gradient-to-br from-indigo-600 to-blue-700 border-none text-white shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -90,7 +81,6 @@ export default function Dashboard() {
         </Card>
       </div>
 
-      {/* Seção de Gráficos */}
       <div className="grid gap-6 md:grid-cols-2">
         <Card className="bg-[#1a1c24] border-slate-800 text-white p-4">
           <CardHeader>
@@ -126,9 +116,8 @@ export default function Dashboard() {
             <CardDescription className="text-slate-400 text-xs">Últimos 6 meses</CardDescription>
           </CardHeader>
           <CardContent className="h-[300px]">
-             {/* Aqui você pode implementar o BarChart conforme seu histórico do Backend */}
              <div className="flex items-center justify-center h-full text-slate-500 italic text-sm">
-                Pronto para receber o histórico da API...
+               Pronto para receber o histórico da API...
              </div>
           </CardContent>
         </Card>

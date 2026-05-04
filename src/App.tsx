@@ -1,24 +1,28 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import Transactions from "./pages/Transactions";
+import Dashboard  from "@/pages/Dashboard";
+import { Transactions } from "@/pages/Transactions";
+import { Toaster } from "@/components/ui/sonner"; 
 
 function App() {
   return (
     <Router>
-      <div className="min-h-screen bg-[#0f1117]">
+      <div className="min-h-screen bg-slate-950 text-slate-50">
         <Routes>
-          {/* Redireciona a raiz (/) automaticamente para o Dashboard */}
+          {}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           
-          {/* Rota do Dashboard com Gráficos e Cards */}
+          {}
           <Route path="/dashboard" element={<Dashboard />} />
           
-          {/* Rota da Listagem de Transações (com suporte a Soft Delete no futuro) */}
-          <Route path="/transacoes" element={<Transactions />} />
-
-          {/* Rota de fallback para evitar telas brancas em caminhos inexistentes */}
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          {}
+          <Route path="/transactions" element={<Transactions />} />
+          
+          {}
+          <Route path="*" element={<Navigate to="/dashboard" />} />
         </Routes>
+        
+        {}
+        <Toaster richColors position="top-right" />
       </div>
     </Router>
   );
