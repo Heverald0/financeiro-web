@@ -10,10 +10,16 @@ export interface Transaction {
   observacao?: string;
 }
 
+export interface CategoriaResumo {
+  name: string;
+  value: number;
+}
+
 export interface ResumoFinanceiro {
   saldoTotal: number;
   receitasMes: number;
   despesasMes: number;
+  gastosPorCategoria: CategoriaResumo[];
 }
 
 export const financeiroService = {
