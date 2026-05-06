@@ -1,7 +1,9 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Dashboard  from "@/pages/Dashboard";
+import Dashboard from "@/pages/Dashboard";
 import { Transactions } from "@/pages/Transactions";
+import Login from "./pages/Login"; 
 import { Toaster } from "@/components/ui/sonner"; 
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -9,19 +11,31 @@ function App() {
       <div className="min-h-screen bg-slate-950 text-slate-50">
         <Routes>
           {}
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="/" element={<Login />} />
           
           {}
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route 
+            path="/dashboard" 
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } 
+          />
+          
+          <Route 
+            path="/transactions" 
+            element={
+              <ProtectedRoute>
+                <Transactions />
+              </ProtectedRoute>
+            } 
+          />
           
           {}
-          <Route path="/transactions" element={<Transactions />} />
-          
-          {}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
         
-        {}
         <Toaster richColors position="top-right" />
       </div>
     </Router>
