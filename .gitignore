@@ -1,3 +1,19 @@
-node_modules/
-dist/
-.env
+# Node - Ignora as dependências do React
+**/node_modules/
+**/dist/
+**/.eslintcache
+
+# Java / Maven - Ignora os builds do Spring
+**/target/
+**/.mvn/
+**/bin/
+*.class
+
+# IDEs - Ignora configurações do seu VS Code
+.vscode/
+.idea/
+*.swp
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
