@@ -25,16 +25,24 @@ export default function Login() {
 
     setLoading(true);
     try {
-      const { data, status } = await axios.post<LoginResponse>(
+      // Alteração: Enviando 'senha' em vez de 'password' e aceitando string ou objeto no retorno
+      const { data, status } = await axios.post<LoginResponse | string>(
         "http://localhost:8080/api/auth/login",
-        { email, password },
+        { email, senha: password }, 
         { headers: { "Content-Type": "application/json" } },
       );
 
-      if (status === 200 && data?.token) {
-        localStorage.setItem("token", data.token);
-        toast.success("Login realizado!");
-        navigate("/dashboard");
+      if (status === 200 && data) {
+        // Alteração: Extração flexível do token (funciona para String pura ou JSON)
+        const tokenValido = typeof data === 'string' ? data : data.token;
+
+        if (tokenValido) {
+          localStorage.setItem("token", tokenValido);
+          toast.success("Login realizado!");
+          navigate("/dashboard");
+        } else {
+          toast.error("Erro ao processar token de acesso.");
+        }
       } else {
         toast.error("E-mail ou senha inválidos");
       }
